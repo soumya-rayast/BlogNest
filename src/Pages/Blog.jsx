@@ -1,6 +1,6 @@
 import { useParams, useState } from "react"
 import { AiFillHome } from "react-icons/ai"
-import { MdAccountCircle } from "react-icons/md"
+import { MdAccountCircle, MdDelete, MdEdit } from "react-icons/md"
 import { Link } from "react-router-dom"
 import BlogCard from "../Components/BlogCard"
 import coinwave from "../assets/Trial/coinwave.jpg";
@@ -62,18 +62,39 @@ const Blog = () => {
 
               <div className="flex justify-between items-start gap-3 my-5">
                 {
-                  userAuthenticated ? (<img src={sam} alt="profile" className="w-[50px] -[50px] rounded-full " /> ): (<MdAccountCircle className="text-gray-600 text-5xl"  />)
+                  userAuthenticated ? (<img src={sam} alt="profile" className="w-[50px] h-[50px] rounded-full " />) : (<MdAccountCircle className="text-gray-600 text-5xl" />)
                 }
                 <div>
-                  <textarea 
-                  name="message" 
-                  id="message" 
-                  rows="2" 
-                  className="md:w-[35vw] rounded-lg outline-none shadow-md text-base px-3 py-2">          </textarea>
+                  <textarea
+                    name="message"
+                    id="message"
+                    rows="2"
+                    className="md:w-[35vw] rounded-lg outline-none shadow-md text-base px-3 py-2">          </textarea>
                   <div className="flex gap-3">
                     <button className="text-white bg-purple-500 hover:bg-purple-400 px-5 py-1 text-base font-semibold transition-all duration-300 ease-linear rounded-md w-fit">Add</button>
                     <button className="text-white bg-purple-500 hover:bg-purple-400 px-5 py-1 text-base font-semibold transition-all duration-300 ease-linear rounded-md w-fit">
-                      {!userAuthenticated ? "Sign In with google":" Sign out " }
+                      {!userAuthenticated ? "Sign In with google" : " Sign out "}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {/* LISTING COMMENTS */}
+              <div>
+                <div className="flex flex-col md:flex-row justify-start items-center md:gap-3 my-3 ">
+                  <img src={sam} alt="profile" className="w-[50px] h-[50px] rounded-full hidden md:block" />
+                  <div className="bg-white w-full md:w-[35vw] rounded-lg py-2 text-sm md:text-base px-3 shadow-md">
+                    <div className="flex justify-between">
+                      <span className="text-xs md:text-sm font-semibold">Soumya rayast</span>
+                      <div className="flex gap-1">
+                        <MdEdit  className="text-gray-500 hover:text-purple-500 hover:scale-105 transition-all ease-in-out cursor-pointer"/>
+                        <MdDelete className="text-gray-500 hover:text-purple-500 hover:scale-105 transition-all ease-in-out cursor-pointer"/>
+                      </div>
+                    </div>
+                    <p className={`outline-none bg-gray-100 shadow-inner pl-1 rounded-md my-3 transition-all duration-500 ease-in-out`}>
+                      Hello your project is good
+                    </p>
+                    <button className="bg-purple-500 hover:bg-purple-600 px-3 py-1 text-white text-sm rounded-lg">
+                      Save
                     </button>
                   </div>
                 </div>
@@ -85,5 +106,4 @@ const Blog = () => {
     </>
   )
 }
-
 export default Blog
