@@ -1,3 +1,4 @@
+import BlogSection from "../Components/BlogSection"
 import Main from "../Components/Main"
 import Navbar from "../Components/Navbar"
 const Home = () => {
@@ -5,6 +6,7 @@ const Home = () => {
     <div>
       <Navbar/>
       <Main/>
+      <BlogSection/>
     </div>
   )
 }
