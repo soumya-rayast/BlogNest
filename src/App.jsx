@@ -5,11 +5,13 @@ import Admin from './Pages/Admin'
 import Blog from './Pages/Blog'
 import BlogContext from './context/BlogContext'
 import { useState } from 'react'
+import { Toaster } from 'react-hot-toast'
 function App() {
-  const [isAuth, setIsAuth] = useState(true)
+  const [isAuth, setIsAuth] = useState(false)
   return (
     <BlogContext.Provider value={{ isAuth, setIsAuth }} >
       <BrowserRouter>
+      <Toaster/>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/admin' element={<Admin />} />
