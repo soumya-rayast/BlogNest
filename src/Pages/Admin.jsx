@@ -1,12 +1,12 @@
 import AdminNavbar from "../Components/AdminNavbar";
 import BlogContext from "../context/BlogContext"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import axios from "axios";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 const Admin = () => {
   const { isAuth, setIsAuth } = useContext(BlogContext);
-  
-  const handleLogin = async (e) =>{
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const username = e.target.elements.username.value;
@@ -16,13 +16,14 @@ const Admin = () => {
           username,
           password
         });
-        const data = await res.data;
-        toast.success(data.message)
-        setIsAuth(true);
+      const data = await res.data;
+      toast.success(data.message)
+      setIsAuth(true);
     } catch (error) {
       console.log(error.message)
     }
   }
+  useEffect(() => { },[])
   return (
     // Admin login
     <div>
@@ -62,7 +63,7 @@ const Admin = () => {
           </form>
         </div>) : (
           <div>
-            <h2><AdminNavbar/></h2>
+            <h2><AdminNavbar /></h2>
           </div>)
       }
 
