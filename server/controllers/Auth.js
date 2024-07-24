@@ -22,7 +22,7 @@ const login = async (req, res) => {
     try {
         const user = await User.findOne({username});
         if(!user){
-            res.status(400).json({message :"Invalid username"});
+           return res.status(400).json({message :"Invalid username"});
         }
         const isPasswordValid = await bcrypt.compare(password,user.password);
         if(!isPasswordValid){
@@ -31,10 +31,10 @@ const login = async (req, res) => {
         const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{
             expiresIn:"1d",
         });
-        res.status(200).json({message:"Logged in successfully",token})
+        return res.status(200).json({message:"Logged in successfully",token})
 
     } catch (error) {
-        res.status(500).json({message:"Something Went wrong",error})
+        return res.status(500).json({message:"Something Went wrong",error})
     }
 }
 const checkAuth = async(req,res) =>{

@@ -1,6 +1,10 @@
 import { MdDelete } from "react-icons/md";
 import JoditEditor from "jodit-react";
 import { useCallback, useRef, useState } from "react";
+import { uploadImage } from "../UploadImage";
+import toast from "react-hot-toast";
+import axios from "axios";
+import LoadingBar from "react-top-loading-bar";
 const CreateBlog = () => {
     const editor = useRef(null);
     const [title, setTitle] = useState("");
@@ -26,24 +30,47 @@ const CreateBlog = () => {
             setThumbnail(file);
         }
     }, [])
+
     const CreatePost = async (e) => {
         e.preventDefault();
-        console.log(title, thumbnail, content);
+        if (!thumbnail) {
+            return toast.error("please upload a thumbnail image.")
+        }
+        // Function to track progress 
         const onUploadProgress = (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
             setProgress(percentCompleted);
-            try {
-                
-            } catch (error) {
-                console.log(error)
+        }
+        try {
+            const uploadedImage = await uploadImage(thumbnail, onUploadProgress)
+            if (!uploadImage) {
+                return toast.error("Error uploading Image")
             }
+            const res = await axios.post("http://localhost:5000/api/createBlog", {
+                title,
+                content,
+                author: "sam",
+                tags,
+                thumbnail: uploadImage.url,
+                publicId: uploadImage.publicId
+            })
+            const data = await res.data;
+            toast.success(data.message);
+            setTags([])
+            setProgress(0)
+            setTitle("")
+            setContent("")
+            setThumbnail(null)
+        } catch (error) {
+            console.log(error)
         }
 
     }
     return (
         <div className="md:w-[60vw] bg-white my-20 mx-auto py-4 rounded-2xl">
+            <LoadingBar progress={progress}/>
             <h3 className="text-2xl text-gray-600 text-center">Let us Create a blog Post</h3>
-            <form action="" className="grid grid-cols-1 gap-3 my-6 pl-3 pr-3">
+            <form onSubmit={createPost} className="grid grid-cols-1 gap-3 my-6 pl-3 pr-3">
                 <div className="flex flex-col">
                     <label
                         htmlFor="title"
@@ -90,7 +117,7 @@ const CreateBlog = () => {
                             value={currentTag}
                             onChange={(e) => setCurrentTag(e.target.value)}
                             className="rounded-2xl px-3 py-1 text-lg outline-none bg-gray-100 w-full md:w-[80%]" />
-                        <button onClick={() => { addTag(currentTag); setCurrentTag("") }}
+                        <button onClick={(e) => { e.preventDefault(); addTag(currentTag); setCurrentTag("") }}
                             className="mt-2 py-2 px-8 text-base bg-purple-500 hover:bg-purple-400 rounded-3xl text-white font-semibold w-fit">
                             Add Tag
                         </button>
@@ -111,7 +138,7 @@ const CreateBlog = () => {
                 </div>
                 <div>
                     <label htmlFor="editor" className="text-lg font-semibold text-gray-600">Content</label>
-                    <JoditEditor ref={editor} value={content} onChange={(newContent) => setContent => (newContent)} />
+                    <JoditEditor ref={editor} value={content} onChange={(newContent) => setContent(newContent)} />
                     <button type="submit" className="mt-2 py-2 px-8 text-base bg-purple-500 hover:bg-purple-400 rounded-3xl text-white font-semibold w-fit">
                         Create Blog
                     </button>
@@ -122,3 +149,4 @@ const CreateBlog = () => {
 }
 
 export default CreateBlog
+
